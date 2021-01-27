@@ -346,11 +346,19 @@ void init_forkserver(char** argv) {
   printf("Spinning up the fork server...\n");
   printf("NEW VERSION 2!\n");
   perror("XXXXXXXXXXXXXXXXXXXXXXXXX\nX\nX\nX\nX\n");
-  if (pipe(st_pipe) || pipe(ctl_pipe)) perror("pipe() failed");
+  if (pipe(st_pipe) || pipe(ctl_pipe)) {
+      printf("NOOOOOOOOOOOO PIPEEEEEEEEEEEEEEEE\n");
+      perror("pipe() failed");
+  
+  }
 
+  printf("forking... ");
   forksrv_pid = fork();
-
-  if (forksrv_pid < 0) perror("fork() failed");
+  printf(".. forked\n");
+  if (forksrv_pid < 0) {
+    printf("NOOOOOOOOOOOO FORKKKKKKKKKKKKKK\n");
+    perror("fork() failed");
+  }
 
   if (!forksrv_pid) {
 
