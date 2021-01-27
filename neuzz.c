@@ -435,7 +435,7 @@ void init_forkserver(char** argv) {
                            "detect_leaks=0:"
                            "symbolize=0:"
                            "allocator_may_return_null=1", 0);
-    fprintf(stderr,"TARGET_PATH %s \n#################\n##############\n",target_path);
+    printf("TARGET_PATH %s \n#################\n##############\n",target_path);
     execv(target_path, argv);
     
     /* Use a distinctive bitmap signature to tell the parent about execv()
