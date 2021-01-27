@@ -622,8 +622,9 @@ void detect_file_args(char** argv) {
 
 /* set up target path */ 
 void setup_targetpath(char * argvs){
-    char* cwd = getcwd(NULL, 0);
-    target_path = alloc_printf("%s/%s", cwd, argvs);
+    // char* cwd = getcwd(NULL, 0);
+    target_path = argvs;
+    // target_path = alloc_printf("%s/%s", cwd, argvs);
     argvs = target_path;
 }
 
