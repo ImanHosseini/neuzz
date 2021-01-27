@@ -34,7 +34,7 @@
 /* Maximum line length passed from GCC to 'as' and used for parsing configuration files. */
 #define MAX_LINE            8192
 /* Designated file descriptors for forkserver commands (the application will use FORKSRV_FD and FORKSRV_FD + 1). */
-#define FORKSRV_FD          198
+#define FORKSRV_FD          220
 /* Distinctive bitmap signature used to indicate failed execution. */
 #define EXEC_FAIL_SIG       0xfee1dead
 /* Smoothing divisor for CPU load and exec speed stats (1 - no smoothing). */
