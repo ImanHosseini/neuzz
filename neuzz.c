@@ -406,7 +406,7 @@ void init_forkserver(char** argv) {
        specified, stdin is /dev/null; otherwise, out_fd is cloned instead. */
 
     setsid();
-
+    printf("IM DYING.... \n");
     dup2(dev_null_fd, 1);
     dup2(dev_null_fd, 2);
 
