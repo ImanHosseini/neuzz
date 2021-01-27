@@ -345,6 +345,7 @@ void init_forkserver(char** argv) {
   out_file = alloc_printf("%s/.cur_input", out_dir);
   printf("Spinning up the fork server...\n");
   printf("NEW VERSION!\n");
+  perror("XXXXXXXXXXXXXXXXXXXXXXXXX\nX\nX\nX\nX\n");
   if (pipe(st_pipe) || pipe(ctl_pipe)) perror("pipe() failed");
 
   forksrv_pid = fork();
