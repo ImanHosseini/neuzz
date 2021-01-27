@@ -34,7 +34,7 @@
 /* Maximum line length passed from GCC to 'as' and used for parsing configuration files. */
 #define MAX_LINE            8192
 /* Designated file descriptors for forkserver commands (the application will use FORKSRV_FD and FORKSRV_FD + 1). */
-#define FORKSRV_FD          220
+#define FORKSRV_FD          198
 /* Distinctive bitmap signature used to indicate failed execution. */
 #define EXEC_FAIL_SIG       0xfee1dead
 /* Smoothing divisor for CPU load and exec speed stats (1 - no smoothing). */
@@ -98,7 +98,7 @@ static int mem_limit  = 1024;           /* Maximum memory limit for target progr
 static int cpu_aff = -1;                /* Selected CPU core */
 int round_cnt = 0;                      /* Round number counter */
 int edge_gain=0;                        /* If there is new edge gain */
-int exec_tmout = 8000;                  /* Exec timeout (ms)                 */
+int exec_tmout = 1000;                  /* Exec timeout (ms)                 */
 
 int stage_num = 1;
 int old=0;
@@ -344,21 +344,12 @@ void init_forkserver(char** argv) {
   int rlen;
   out_file = alloc_printf("%s/.cur_input", out_dir);
   printf("Spinning up the fork server...\n");
-  printf("NEW VERSION 2!\n");
-  perror("XXXXXXXXXXXXXXXXXXXXXXXXX\nX\nX\nX\nX\n");
-  if (pipe(st_pipe) || pipe(ctl_pipe)) {
-      printf("NOOOOOOOOOOOO PIPEEEEEEEEEEEEEEEE\n");
-      perror("pipe() failed");
-  
-  }
 
-  printf("forking... ");
+  if (pipe(st_pipe) || pipe(ctl_pipe)) perror("pipe() failed");
+
   forksrv_pid = fork();
-  printf(".. forked\n");
-  if (forksrv_pid < 0) {
-    printf("NOOOOOOOOOOOO FORKKKKKKKKKKKKKK\n");
-    perror("fork() failed");
-  }
+
+  if (forksrv_pid < 0) perror("fork() failed");
 
   if (!forksrv_pid) {
 
@@ -406,9 +397,9 @@ void init_forkserver(char** argv) {
        specified, stdin is /dev/null; otherwise, out_fd is cloned instead. */
 
     setsid();
-    printf("IM DYING.... \n");
-    // dup2(dev_null_fd, 1);
-    // dup2(dev_null_fd, 2);
+
+    dup2(dev_null_fd, 1);
+    dup2(dev_null_fd, 2);
 
     if (out_file) {
 
@@ -422,36 +413,25 @@ void init_forkserver(char** argv) {
     }
 
     /* Set up control and status pipes, close the unneeded original fds. */
-    printf("Set up control and status pipes\n");
+
     if (dup2(ctl_pipe[0], FORKSRV_FD) < 0) perror("dup2() failed");
     if (dup2(st_pipe[1], FORKSRV_FD + 1) < 0) perror("dup2() failed");
 
     close(ctl_pipe[0]);
-    printf("C0 - ");
     close(ctl_pipe[1]);
-    printf("C1 - ");
     close(st_pipe[0]);
-    printf("C2 - ");
     close(st_pipe[1]);
 
-    printf("C3 - ");
     close(out_dir_fd);
-    printf("C4 - ");
     close(dev_null_fd);
-    printf("C5 - ");
     close(dev_urandom_fd);
-    printf("C6 - ");
 
     /* This should improve performance a bit, since it stops the linker from
        doing extra work post-fork(). */
 
     if (!getenv("LD_BIND_LAZY")) setenv("LD_BIND_NOW", "1", 0);
-   
-    setenv("ASAN_OPTIONS", "abort_on_error=1:"
-                           "detect_leaks=0:"
-                           "symbolize=0:"
-                           "allocator_may_return_null=1", 0);
-    printf("TARGET_PATH %s \n#################\n##############\n",target_path);
+
+
     execv(target_path, argv);
     
     /* Use a distinctive bitmap signature to tell the parent about execv()
@@ -623,8 +603,8 @@ void detect_file_args(char** argv) {
 /* set up target path */ 
 void setup_targetpath(char * argvs){
     // char* cwd = getcwd(NULL, 0);
-    target_path = argvs;
     // target_path = alloc_printf("%s/%s", cwd, argvs);
+    target_path = argvs;
     argvs = target_path;
 }
 
