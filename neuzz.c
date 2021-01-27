@@ -414,18 +414,25 @@ void init_forkserver(char** argv) {
     }
 
     /* Set up control and status pipes, close the unneeded original fds. */
-
+    printf("Set up control and status pipes\n");
     if (dup2(ctl_pipe[0], FORKSRV_FD) < 0) perror("dup2() failed");
     if (dup2(st_pipe[1], FORKSRV_FD + 1) < 0) perror("dup2() failed");
 
     close(ctl_pipe[0]);
+    printf("C0 - ");
     close(ctl_pipe[1]);
+    printf("C1 - ");
     close(st_pipe[0]);
+    printf("C2 - ");
     close(st_pipe[1]);
 
+    printf("C3 - ");
     close(out_dir_fd);
+    printf("C4 - ");
     close(dev_null_fd);
+    printf("C5 - ");
     close(dev_urandom_fd);
+    printf("C6 - ");
 
     /* This should improve performance a bit, since it stops the linker from
        doing extra work post-fork(). */
