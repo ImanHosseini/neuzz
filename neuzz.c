@@ -98,7 +98,7 @@ static int mem_limit  = 1024;           /* Maximum memory limit for target progr
 static int cpu_aff = -1;                /* Selected CPU core */
 int round_cnt = 0;                      /* Round number counter */
 int edge_gain=0;                        /* If there is new edge gain */
-int exec_tmout = 1000;                  /* Exec timeout (ms)                 */
+int exec_tmout = 8000;                  /* Exec timeout (ms)                 */
 
 int stage_num = 1;
 int old=0;
