@@ -430,7 +430,11 @@ void init_forkserver(char** argv) {
        doing extra work post-fork(). */
 
     if (!getenv("LD_BIND_LAZY")) setenv("LD_BIND_NOW", "1", 0);
-
+   
+    setenv("ASAN_OPTIONS", "abort_on_error=1:"
+                           "detect_leaks=0:"
+                           "symbolize=0:"
+                           "allocator_may_return_null=1", 0);
 
     execv(target_path, argv);
     
